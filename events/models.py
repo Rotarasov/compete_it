@@ -18,16 +18,6 @@ class Event(models.Model):
     image = models.ImageField(upload_to='event_pics')
     link = models.URLField(max_length=200)
 
-    def clean(self):
-        super().clean()
-
-        if self.start_date >= self.end_date:
-            raise ValidationError("End date must be greater than start date")
-
-    def save(self, *args, **kwargs):
-        self.clean()
-        super().save(*args, **kwargs)
-
 
 class SurveyQuestion(models.Model):
     ANSWER_TYPES = [
