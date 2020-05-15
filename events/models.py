@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 
 
 class Event(models.Model):
@@ -17,6 +16,10 @@ class Event(models.Model):
     type = models.CharField(max_length=9, choices=EVENTS_TYPES)
     image = models.ImageField(upload_to='event_pics')
     link = models.URLField(max_length=200)
+    participants = models.ManyToManyField(User)
+
+    class Meta:
+        ordering = ['start_date']
 
 
 class SurveyQuestion(models.Model):
