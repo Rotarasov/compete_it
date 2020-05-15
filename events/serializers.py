@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from events.models import Event
+from events.models import Event, SurveyQuestion
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -14,5 +14,11 @@ class EventSerializer(serializers.ModelSerializer):
         if data.get('start_date') >= data.get('end_date'):
             raise serializers.ValidationError('End date must be greater than start date')
         return data
+
+
+class SurveyQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SurveyQuestion
+        fields = '__all__'
 
 

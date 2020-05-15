@@ -1,34 +1,32 @@
 from rest_framework import generics
-from rest_framework.response import Response
-from events.models import Event
-from events.serializers import EventSerializer
-from datetime import datetime
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
+from events.filters import EventFilter
+from events import models
+from events import serializers
+from django.shortcuts import get_object_or_404
 
 
 class EventList(generics.ListCreateAPIView):
-    serializer_class = EventSerializer
-    queryset = Event.objects.all()
-
-    def filter_queryset(self, queryset):
-        query_params = self.request.query_params
-        min_date_str = query_params.get('min_date', False)
-        max_date_str = query_params.get('max_date', False)
-        event_type = query_params.get('type', False)
-        if min_date_str:
-            min_date = datetime.strptime(''.join([min_date_str, ':UTC']), '%d.%m.%Y:%Z')
-            queryset = queryset.filter(start_date__gte=min_date)
-        if max_date_str:
-            max_date = datetime.strptime(''.join([max_date_str, ':UTC']), '%d.%m.%Y:%Z')
-            queryset = queryset.filter(start_date__lte=max_date)
-        if event_type:
-            queryset = queryset.filter(type=event_type.lower())
-        return queryset
+    serializer_class = serializers.EventSerializer
+    queryset = models.Event.objects.all()
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_class = EventFilter
+    search_fields = ['title', 'description', 'type']
 
 
 class EventDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializer
+    queryset = models.Event.objects.all()
+    serializer_class = serializers.EventSerializer
 
+
+class SurveyQuestionList(generics.ListCreateAPIView):
+    serializer_class = serializers.SurveyQuestionSerializer
+
+    def get_queryset(self):
+        event = get_object_or_404(models.Event, pk=self.kwargs.get('event_pk'))
+        user = self.request.user
+        return models.SurveyQuestion.objects.filter(event=event)
 
 
 
