@@ -5,7 +5,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('oauth2/', include('oauth2_provider.urls')),
+    path('auth/', include('oauth2_provider.urls')),
     path('events/', include('events.urls'))
 ]
 

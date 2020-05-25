@@ -16,10 +16,21 @@ class Event(models.Model):
     type = models.CharField(max_length=9, choices=EVENTS_TYPES)
     image = models.ImageField(upload_to='event_pics')
     link = models.URLField(max_length=200)
-    participants = models.ManyToManyField(User)
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         ordering = ['start_date']
+
+
+class Participation(models.Model):
+    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.event.title} - {self.user.username}'
+
 
 
 class SurveyAnswer(models.Model):
@@ -28,17 +39,24 @@ class SurveyAnswer(models.Model):
         (False, 'Нет')
     ]
 
-    event = models.ForeignKey('Event', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    participation = models.ForeignKey('Participation', on_delete=models.CASCADE)
     question = models.ForeignKey('SurveyQuestion', on_delete=models.CASCADE)
     answer = models.BooleanField(choices=ANSWER_TYPES)
+
+    def __str__(self):
+        return f'{self.participation} - {self.question.text}'
 
 
 class SurveyQuestion(models.Model):
     text = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.text
+
 
 class TeamApplication(models.Model):
-    event = models.ForeignKey('Event', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    participation = models.OneToOneField('Participation', on_delete=models.CASCADE)
     description = models.TextField()
+
+    def __str__(self):
+        return f'{self.participation}'
