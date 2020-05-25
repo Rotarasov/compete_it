@@ -1,5 +1,4 @@
-from rest_framework import generics
-from rest_framework import filters
+from rest_framework import generics, filters, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 from events.filters import EventFilter
 from events import models
@@ -8,6 +7,7 @@ from django.shortcuts import get_object_or_404
 
 
 class EventList(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = serializers.EventSerializer
     queryset = models.Event.objects.all()
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
