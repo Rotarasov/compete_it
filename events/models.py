@@ -22,7 +22,7 @@ class Event(models.Model):
         ordering = ['start_date']
 
 
-class SurveyQuestion(models.Model):
+class SurveyAnswer(models.Model):
     ANSWER_TYPES = [
         (True, 'Да'),
         (False, 'Нет')
@@ -30,8 +30,12 @@ class SurveyQuestion(models.Model):
 
     event = models.ForeignKey('Event', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.CharField(max_length=200)
+    question = models.ForeignKey('SurveyQuestion', on_delete=models.CASCADE)
     answer = models.BooleanField(choices=ANSWER_TYPES)
+
+
+class SurveyQuestion(models.Model):
+    text = models.CharField(max_length=200)
 
 
 class TeamApplication(models.Model):
