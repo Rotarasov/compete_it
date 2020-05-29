@@ -18,6 +18,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+AUTH_USER_MODEL = 'users.User'
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '756924623353-qb0pso0sp97fr4g7c9dbk0sb0t3g9ulo.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '14YJeQfS2YSgA0nHqTqRQ_2Z'
 
@@ -35,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
-    'events.apps.EventsConfig'
+    'events.apps.EventsConfig',
+    'users.apps.UsersConfig'
 ]
 
 MIDDLEWARE = [

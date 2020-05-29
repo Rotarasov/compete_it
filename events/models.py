@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from users.models import User
 
 
 class Event(models.Model):
@@ -30,7 +30,7 @@ class Participation(models.Model):
     passed_survey = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.event.title} - {self.user.username}'
+        return f'{self.event.title} - {self.user.get_full_name()}'
 
 
 class SurveyQuestion(models.Model):
