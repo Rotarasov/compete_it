@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from events.models import Event, SurveyQuestion
+from events import models
 
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Event
+        model = models.Event
         fields = '__all__'
 
     def validate(self, data):
@@ -16,9 +16,15 @@ class EventSerializer(serializers.ModelSerializer):
         return data
 
 
-class SurveyQuestionSerializer(serializers.ModelSerializer):
+class SurveyAnswerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SurveyQuestion
+        model = models.SurveyAnswer
+        fields = ['id', 'answer']
+
+
+class SurveyQuestionSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = models.SurveyQuestion
         fields = '__all__'
-
-

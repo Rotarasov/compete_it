@@ -27,10 +27,17 @@ class Event(models.Model):
 class Participation(models.Model):
     event = models.ForeignKey('Event', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    passed_survey = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.event.title} - {self.user.username}'
 
+
+class SurveyQuestion(models.Model):
+    text = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.text
 
 
 class SurveyAnswer(models.Model):
@@ -45,13 +52,6 @@ class SurveyAnswer(models.Model):
 
     def __str__(self):
         return f'{self.participation} - {self.question.text}'
-
-
-class SurveyQuestion(models.Model):
-    text = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.text
 
 
 class TeamApplication(models.Model):
