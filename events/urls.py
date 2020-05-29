@@ -4,5 +4,6 @@ from events import views
 urlpatterns = [
     path('', views.EventList.as_view()),
     path('<int:pk>/', views.EventDetail.as_view()),
-    path('<int:event_pk>/survey/', views.SurveyList.as_view())
+    path('<int:event_pk>/survey/', views.SurveyQuestionList.as_view()),
+    path('<int:event_pk>/survey/<int:question_pk>', views.SurveyAnswer.as_view())
 ]

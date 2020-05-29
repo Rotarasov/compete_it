@@ -1,4 +1,4 @@
-from rest_framework import generics, filters, permissions
+from rest_framework import generics, filters, permissions, status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from events.filters import EventFilter
@@ -35,18 +35,25 @@ class EventDetail(generics.RetrieveUpdateDestroyAPIView):
         return serializer_class(*args, **kwargs)
 
 
-class SurveyList(generics.ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+class SurveyQuestionList(generics.ListAPIView):
+    # permission_classes = [permissions.IsAuthenticated]
+    queryset = models.SurveyQuestion.objects.all()
     serializer_class = serializers.SurveyQuestionSerializer
 
-    def get_queryset(self):
-        event = generics.get_object_or_404(models.Event, pk=self.kwargs.get('event_pk'))
-        user = self.request.user
-        return models.SurveyQuestion.objects.filter(user=user, event=event)
 
+class SurveyAnswer(generics.CreateAPIView):
+    # permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.SurveyAnswerSerializer
 
-
-
+    def create(self, request, *args, **kwargs):
+        participation = generics.get_object_or_404(models.Participation,
+                                                   user=self.request.user, event_id=self.kwargs.get('event_pk'))
+        data = {'participation': participation.id, **request.data}
+        serializer = self.get_serializer(data=data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 

@@ -28,13 +28,14 @@ class EventSerializer(serializers.ModelSerializer):
         return data
 
 
-class SurveyAnswerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.SurveyAnswer
-        fields = ['id', 'answer']
-
-
 class SurveyQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SurveyQuestion
         fields = '__all__'
+
+
+class SurveyAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SurveyAnswer
+        fields = '__all__'
+
