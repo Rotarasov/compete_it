@@ -21,8 +21,6 @@ class EventList(generics.ListCreateAPIView):
         return serializer_class(*args, **kwargs)
 
 
-
-
 class EventDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = serializers.EventSerializer
@@ -36,24 +34,31 @@ class EventDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class SurveyQuestionList(generics.ListAPIView):
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = models.SurveyQuestion.objects.all()
     serializer_class = serializers.SurveyQuestionSerializer
 
 
 class SurveyAnswer(generics.CreateAPIView):
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = serializers.SurveyAnswerSerializer
 
     def create(self, request, *args, **kwargs):
-        participation = generics.get_object_or_404(models.Participation,
-                                                   user=self.request.user, event_id=self.kwargs.get('event_pk'))
-        data = {'participation': participation.id, **request.data}
-        serializer = self.get_serializer(data=data, many=True)
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        participation = models.Participation.objects.get(id=serializer.data['participation'])
+        passed_questions = models.SurveyAnswer.objects.filter(participation_id=participation).count()
+        if passed_questions == 3:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        passed_survey = False
+        all_questions = models.SurveyQuestion.objects.all().count()
+        if passed_questions == all_questions:
+            passed_survey = True
+        participation.passed_survey = passed_survey
+        return Response({'passed_survey': passed_survey, **serializer.data},
+                        status=status.HTTP_201_CREATED, headers=headers)
 
 
 
