@@ -7,7 +7,7 @@ from django.db import models
 
 class UserManager(BaseUserManager):
     def create_user(
-            self, email, first_name, last_name, password=None,
+            self, email, first_name, last_name, password=None, image=None,
             commit=True):
         """
         Creates and saves a User with the given email, first name, last name
@@ -19,12 +19,14 @@ class UserManager(BaseUserManager):
             raise ValueError(_('Users must have a first name'))
         if not last_name:
             raise ValueError(_('Users must have a last name'))
-
         user = self.model(
             email=self.normalize_email(email),
             first_name=first_name,
             last_name=last_name,
         )
+
+        if image:
+            user.image = image
 
         user.set_password(password)
         user.save(using=self._db)
@@ -52,8 +54,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         verbose_name=_('email address'), max_length=255, unique=True
     )
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=150, blank=True)
+    first_name = models.CharField(_('first name'), max_length=30)
+    last_name = models.CharField(_('last name'), max_length=150)
     is_active = models.BooleanField(
         _('active'),
         default=True,

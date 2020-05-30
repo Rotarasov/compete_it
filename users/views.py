@@ -1,6 +1,6 @@
 from google.auth.transport import requests
 from google.oauth2 import id_token
-from rest_framework import status
+from rest_framework import status, generics, permissions
 from rest_framework.authtoken import views
 from rest_framework.authtoken.models import Token
 from rest_framework.compat import coreapi, coreschema
@@ -66,5 +66,34 @@ class ObtainGoogleAuthToken(APIView):
             return Response({'token': token.key, 'user_id': user.id}, status=status.HTTP_200_OK)
         except Exception as ex:
             return Response({'error': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.User.objects.all()
+
+
+class Logout(APIView):
+    def get(self, request, *args, **kwargs):
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class RegisterUser(generics.CreateAPIView):
+    serializer_class = serializers.UserRegistrationSerializer
+    queryset = models.User.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        data = serializer.data
+        user = models.User.objects.get(email=data['email'])
+        token, _ = Token.objects.get_or_create(user=user)
+        data['id'] = user.id
+        data['token'] = token.key
+        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
 
 

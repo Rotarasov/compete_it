@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'rest_social_auth',
     'django_filters',
     'events.apps.EventsConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'chats.apps.ChatsConfig',
 ]
 
 MIDDLEWARE = [
