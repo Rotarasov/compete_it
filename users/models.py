@@ -27,8 +27,7 @@ class UserManager(BaseUserManager):
         )
 
         user.set_password(password)
-        if commit:
-            user.save(using=self._db)
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, email, first_name, last_name, password):
@@ -43,14 +42,13 @@ class UserManager(BaseUserManager):
             last_name=last_name,
             commit=False,
         )
-        user.is_staff = True
-        user.is_superuser = True
+        user.is_admin = True
         user.save(using=self._db)
         return user
 
 
-class User(AbstractBaseUser):
-    image = models.ImageField(_('profile image'), upload_to='user_pics', default='default-user.png')
+class User(AbstractBaseUser, PermissionsMixin):
+    image = models.ImageField(_('profile image'), upload_to='user_pics', default='user_pics/default.png')
     email = models.EmailField(
         verbose_name=_('email address'), max_length=255, unique=True
     )
@@ -64,7 +62,7 @@ class User(AbstractBaseUser):
             'Unselect this instead of deleting accounts.'
         ),
     )
-    is_staff = models.BooleanField(
+    is_admin = models.BooleanField(
         _('staff status'),
         default=False,
         help_text=_(
@@ -79,8 +77,18 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
-        return f'{self.email} {self.get_full_name()}'
+        return f'{self.email}'
 
     def get_full_name(self):
         return f'{self.first_name} {self.last_name}'
+
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
+
+    @property
+    def is_staff(self):
+        return self.is_admin
 
