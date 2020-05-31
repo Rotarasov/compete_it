@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
+    'drf_yasg',
     'events.apps.EventsConfig',
     'users.apps.UsersConfig',
     'chats.apps.ChatsConfig',
