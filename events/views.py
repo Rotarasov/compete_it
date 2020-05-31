@@ -123,6 +123,7 @@ class TeamApplicationDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class Participation(mixins.CreateModelMixin,
                     mixins.DestroyModelMixin,
+                    mixins.RetrieveModelMixin,
                     generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = serializers.ParticipationSerializer
@@ -132,6 +133,13 @@ class Participation(mixins.CreateModelMixin,
         user_id = self.request.user.id
         return models.Participation.objects.filter(user_id=user_id,
                                             event_id=self.kwargs.get('event_pk')).first()
+
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance is None:
+            return Response({'details': 'User does not participate in this event'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
         user_id = self.request.user.id
