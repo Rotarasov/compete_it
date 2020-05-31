@@ -1,4 +1,4 @@
-from rest_framework import generics, filters, permissions, status
+from rest_framework import generics, filters, permissions, status, mixins
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from events.filters import EventFilter
@@ -62,8 +62,6 @@ class SurveyAnswer(generics.CreateAPIView):
                         status=status.HTTP_201_CREATED, headers=headers)
 
 
-#TODO TeamApplications
-
 class TeamApplicationList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = serializers.TeamApplicationSerializer
@@ -123,6 +121,36 @@ class TeamApplicationDetail(generics.RetrieveUpdateDestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class Participation(mixins.CreateModelMixin,
+                    mixins.DestroyModelMixin,
+                    generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.ParticipationSerializer
+    queryset = models.Participation.objects.all()
 
+    def get_object(self):
+        user_id = self.request.user.id
+        return models.Participation.objects.filter(user_id=user_id,
+                                            event_id=self.kwargs.get('event_pk')).first()
 
+    def post(self, request, *args, **kwargs):
+        user_id = self.request.user.id
+        participation = models.Participation.objects.filter(user_id=user_id,
+                                                            event_id=self.kwargs.get('event_pk')).first()
+        if participation is not None:
+            return Response({'details': "User already participates in this event"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        data = {'user': user_id, 'event': self.kwargs.get('event_pk')}
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
 
+    def delete(self, request, *args, **kwargs):
+        participation = self.get_object()
+        if participation is None:
+            return Response({'details': "User does not participate in this event yet"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        self.perform_destroy(participation)
+        return Response(status=status.HTTP_204_NO_CONTENT)

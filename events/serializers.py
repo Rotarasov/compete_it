@@ -52,3 +52,9 @@ class TeamApplicationSerializer(serializers.ModelSerializer):
         event = model_to_dict(obj.participation.event, fields=['id', 'title'])
         user = model_to_dict(obj.participation.user, fields=['id', 'first_name', 'last_name', 'email'])
         return {'event': event, 'user': user}
+
+
+class ParticipationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Participation
+        fields = ['user', 'event']
