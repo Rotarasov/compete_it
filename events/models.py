@@ -55,7 +55,7 @@ class SurveyAnswer(models.Model):
 
 
 class TeamApplication(models.Model):
-    participation = models.OneToOneField('Participation', on_delete=models.CASCADE)
+    participation = models.OneToOneField('Participation', on_delete=models.CASCADE, primary_key=True)
     description = models.TextField()
 
     def __str__(self):

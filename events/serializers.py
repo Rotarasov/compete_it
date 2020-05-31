@@ -1,3 +1,4 @@
+from django.forms.models import model_to_dict
 from rest_framework import serializers
 from events import models
 
@@ -39,3 +40,15 @@ class SurveyAnswerSerializer(serializers.ModelSerializer):
         model = models.SurveyAnswer
         fields = '__all__'
 
+
+class TeamApplicationSerializer(serializers.ModelSerializer):
+    participation_info = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = models.TeamApplication
+        fields = ['participation', 'description', 'participation_info']
+
+    def get_participation_info(self, obj):
+        event = model_to_dict(obj.participation.event, fields=['id', 'title'])
+        user = model_to_dict(obj.participation.user, fields=['id', 'first_name', 'last_name', 'email'])
+        return {'event': event, 'user': user}
