@@ -26,6 +26,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer',
+    ],
 }
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '756924623353-qb0pso0sp97fr4g7c9dbk0sb0t3g9ulo.apps.googleusercontent.com'
