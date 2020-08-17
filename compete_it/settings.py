@@ -45,6 +45,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -90,6 +91,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'compete_it.wsgi.application'
+
+ASGI_APPLICATION = 'compete_it.routing.application'
 
 
 # Database
