@@ -1,10 +1,7 @@
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
-import pytest
-from channels.testing import WebsocketCommunicator
 
-from compete_it.routing import application
 from users.models import User
 from .models import ChatRoom, Message
 
