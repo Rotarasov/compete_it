@@ -28,11 +28,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
     @database_sync_to_async
-    def create_or_open_chat_room(self, sender, recipient):
-        chat_room = (ChatRoom.objects.filter(members=sender) & ChatRoom.objects.filter(members=recipient)).first()
+    def create_or_open_chat_room(self, u1, u2):
+        chat_room = (ChatRoom.objects.filter(members=u1) & ChatRoom.objects.filter(members=u2)).first()
         if not chat_room:
             chat_room = ChatRoom.objects.create()
-            chat_room.members.add(sender, recipient)
+            chat_room.members.add(u1, u2)
         return chat_room
 
     @database_sync_to_async
