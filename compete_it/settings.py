@@ -1,5 +1,6 @@
 import os
 
+import django_heroku
 from dotenv import load_dotenv, find_dotenv
 import dj_database_url
 
@@ -165,3 +166,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
