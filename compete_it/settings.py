@@ -38,7 +38,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 12,
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ],xw
+    ],
 }
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '756924623353-qb0pso0sp97fr4g7c9dbk0sb0t3g9ulo.apps.googleusercontent.com'
