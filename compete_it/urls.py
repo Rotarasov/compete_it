@@ -33,5 +33,4 @@ urlpatterns = [
     path('chats/', include('chats.urls')),
 ]
 
-urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'html'])
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
