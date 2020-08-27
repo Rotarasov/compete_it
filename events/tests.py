@@ -1,7 +1,9 @@
-from django.test import TestCase
-from events import models
 import datetime
+
 import pytz
+from django.test import TestCase
+
+from events import models
 
 
 class EventTestCase(TestCase):

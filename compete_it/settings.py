@@ -1,8 +1,8 @@
 import os
 
+import dj_database_url
 import django_heroku
 from dotenv import load_dotenv, find_dotenv
-import dj_database_url
 
 load_dotenv(find_dotenv())
 

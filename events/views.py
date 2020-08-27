@@ -1,9 +1,10 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters, permissions, status, mixins
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
-from events.filters import EventFilter
+
 from events import models
 from events import serializers
+from events.filters import EventFilter
 from users.models import User
 
 

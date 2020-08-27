@@ -1,11 +1,12 @@
 import json
 
-from django.core.exceptions import ObjectDoesNotExist
-from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
+from channels.generic.websocket import AsyncWebsocketConsumer
+from django.core.exceptions import ObjectDoesNotExist
 
-from .models import ChatRoom, Message
 from users.models import User
+from .models import ChatRoom, Message
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):

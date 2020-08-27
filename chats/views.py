@@ -3,6 +3,7 @@ from rest_framework import generics, permissions
 from chats import serializers, models
 from users.models import User
 
+
 class MessageList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = serializers.MessageSerializer

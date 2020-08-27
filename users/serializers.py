@@ -1,10 +1,9 @@
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
-
 from rest_framework import serializers
 
-from users.models import User
 from events.models import Participation
+from users.models import User
 
 
 class CustomAuthTokenSerializer(serializers.Serializer):

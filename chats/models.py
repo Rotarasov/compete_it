@@ -2,6 +2,7 @@ from django.db import models
 
 from compete_it import settings
 
+
 class ChatRoom(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='chat_rooms')
