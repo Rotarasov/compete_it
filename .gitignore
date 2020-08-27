@@ -1,8 +1,16 @@
-media/
+# Media pics
+media/event_pics/*
+media/user_pics/*
+!media/user_pics/default*
+
+# Static files
 static/
+
+# PyCharm config
 .idea/
+
+# Test data and
 fixtures/
-templates
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
