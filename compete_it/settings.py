@@ -18,12 +18,16 @@ with open('./secret_key.txt') as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+if os.getenv('LOCAL'):
+    DEBUG = True
 
-ALLOWED_HOSTS = [
-    "compete-it.herokuapp.com"
-]
+    ALLOWED_HOSTS = []
+else:
+    DEBUG = False
 
+    ALLOWED_HOSTS = [
+        "compete-it.herokuapp.com"
+    ]
 
 # Application definition
 
@@ -34,11 +38,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 12,
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.TemplateHTMLRenderer',
-    ],
+    ],xw
 }
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '756924623353-qb0pso0sp97fr4g7c9dbk0sb0t3g9ulo.apps.googleusercontent.com'
@@ -169,3 +169,6 @@ MEDIA_URL = '/media/'
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
+# Ssl mode raise error when sqlite used
+del DATABASES['default']['OPTIONS']['sslmode']
