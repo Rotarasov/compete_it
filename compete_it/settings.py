@@ -14,8 +14,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open('./secret_key.txt') as f:
-    SECRET_KEY = f.read().strip()
+SECRET_KEY = '%j%ja3r8w7+-*^8cba=26r%=z*$o)$514noj3t+ef6&+4w(%2k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.getenv('LOCAL'):
@@ -60,11 +59,13 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage'
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
     'drf_yasg',
+    'cloudinary'
     'events.apps.EventsConfig',
     'users.apps.UsersConfig',
     'chats.apps.ChatsConfig',
@@ -172,3 +173,13 @@ django_heroku.settings(locals())
 
 # Ssl mode raise error when sqlite used
 del DATABASES['default']['OPTIONS']['sslmode']
+
+# Cloudinary storage settings
+if os.getenv('LOCAL'):
+    CLOUDINARY_STORAGE = {
+      'cloud_name': 'hzaah0pgn',
+      'api_key': '652259491279285',
+      'api_secret': 'xgdiyhSVHdCsVnts96ygstVuSXk',
+    }
+
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
