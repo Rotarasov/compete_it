@@ -1,5 +1,6 @@
 import os
 
+import cloudinary
 import dj_database_url
 import django_heroku
 from dotenv import load_dotenv, find_dotenv
@@ -158,6 +159,18 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Activate Django-Heroku.
+django_heroku.settings(locals())
+
+# Ssl mode raise error when sqlite used
+del DATABASES['default']['OPTIONS']['sslmode']
+
+# Cloudinary storage settings
+cloudinary.config(
+    cloud_name='hzaah0pgn',
+    api_key='652259491279285',
+    api_secret='xgdiyhSVHdCsVnts96ygstVuSXk',
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -167,19 +180,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
-# Activate Django-Heroku.
-django_heroku.settings(locals())
-
-# Ssl mode raise error when sqlite used
-del DATABASES['default']['OPTIONS']['sslmode']
-
-# Cloudinary storage settings
-if os.getenv('LOCAL'):
-    CLOUDINARY_STORAGE = {
-      'cloud_name': 'hzaah0pgn',
-      'api_key': '652259491279285',
-      'api_secret': 'xgdiyhSVHdCsVnts96ygstVuSXk',
-    }
-
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

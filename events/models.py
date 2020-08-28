@@ -1,3 +1,5 @@
+from cloudinary.models import CloudinaryField
+
 from django.db import models
 
 from users.models import User
@@ -15,7 +17,8 @@ class Event(models.Model):
     end_date = models.DateTimeField()
     description = models.TextField()
     type = models.CharField(max_length=9, choices=EVENTS_TYPES)
-    image = models.ImageField(upload_to='event_pics')
+    # image = models.ImageField(upload_to='event_pics')
+    image = CloudinaryField('image')
     link = models.URLField(max_length=200)
 
     def __str__(self):

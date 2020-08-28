@@ -1,3 +1,6 @@
+from cloudinary.models import CloudinaryField
+from cloudinary import api
+
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
@@ -51,7 +54,8 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    image = models.ImageField(_('profile image'), upload_to='user_pics', default='user_pics/default.png')
+    # image = models.ImageField(_('profile image'), upload_to='user_pics', default='user_pics/default.png')
+    image = CloudinaryField('image')
     email = models.EmailField(
         verbose_name=_('email address'), max_length=255, unique=True
     )
@@ -94,4 +98,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_staff(self):
         return self.is_admin
+
+    def save(self, *args, **kwargs):
+        if not self.image:
+            self.image = api.resource('user_pics/default').get('url', None)
+        super(User, self).save(*args, **kwargs)
+
+
+
 
