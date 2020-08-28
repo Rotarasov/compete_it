@@ -1,7 +1,5 @@
 # Media pics
-media/event_pics/*
-media/user_pics/*
-!media/user_pics/default*
+media/*
 
 # Static files
 static/
