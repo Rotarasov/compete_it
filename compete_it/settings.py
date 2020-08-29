@@ -159,12 +159,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Activate Django-Heroku.
-django_heroku.settings(locals())
-
-# Ssl mode raise error when sqlite used
-del DATABASES['default']['OPTIONS']['sslmode']
-
 # Cloudinary storage settings
 cloudinary.config(
     cloud_name='hzaah0pgn',
@@ -180,3 +174,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
+
+# Ssl mode raise error when sqlite used
+del DATABASES['default']['OPTIONS']['sslmode']
