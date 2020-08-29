@@ -8,6 +8,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from compete_it import settings
 
 class UserManager(BaseUserManager):
     def create_user(
@@ -54,8 +55,11 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    # image = models.ImageField(_('profile image'), upload_to='user_pics', default='user_pics/default.png')
-    image = CloudinaryField('image')
+    if settings.LOCAL:
+        image = models.ImageField(_('profile image'), upload_to='user_pics', default='user_pics/default.png')
+    else:
+        image = CloudinaryField('image', folder='user_pics')
+
     email = models.EmailField(
         verbose_name=_('email address'), max_length=255, unique=True
     )

@@ -7,6 +7,8 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
+LOCAL = os.getenv('LOCAL') is not None
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -18,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '%j%ja3r8w7+-*^8cba=26r%=z*$o)$514noj3t+ef6&+4w(%2k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.getenv('LOCAL'):
+if LOCAL:
     DEBUG = True
 
     ALLOWED_HOSTS = []
@@ -159,11 +161,12 @@ USE_L10N = True
 USE_TZ = True
 
 # Cloudinary storage settings
-cloudinary.config(
-    cloud_name='hzaah0pgn',
-    api_key='652259491279285',
-    api_secret='xgdiyhSVHdCsVnts96ygstVuSXk',
-)
+if not LOCAL:
+    cloudinary.config(
+        cloud_name='hzaah0pgn',
+        api_key='652259491279285',
+        api_secret='xgdiyhSVHdCsVnts96ygstVuSXk',
+    )
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
