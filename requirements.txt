@@ -65,6 +65,6 @@ toml==0.10.1
 Twisted==20.3.0
 txaio==20.4.1
 uritemplate==3.0.1
-urllib3==1.25.10
+urllib3==1.26.5
 whitenoise==5.2.0
 zope.interface==5.1.0
